@@ -6,7 +6,7 @@ DB_FILE = "cards.sqlite"
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
-    c.execute("""CREATE TABLE owned_cards (name text,
+    c.execute("""CREATE TABLE owned_cards (name text collate nocase,
                                            power text,
                                            toughness text,
                                            type text,
@@ -19,7 +19,7 @@ def init_db():
                                            text text,
                                            printing text)""")
 
-    c.execute("""CREATE TABLE reference_cards (name text,
+    c.execute("""CREATE TABLE reference_cards (name text collate nocase,
                                                power text,
                                                toughness text,
                                                type text,
@@ -35,6 +35,9 @@ def init_db():
                                                    name,
                                                    printing)
                                                    ON CONFLICT REPLACE)""")
+
+    c.execute("CREATE INDEX reference_cards_name_index ON reference_cards (name collate nocase)")
+    c.execute("CREATE INDEX owned_cards_name_index ON owned_cards (name collate nocase)")
 
     conn.commit()
     conn.close()
@@ -74,7 +77,6 @@ def reference_cards_by_name_prefix(prefix):
     return _cards_by_name_prefix(prefix, "reference_cards")
 
 def _cards_by_name_prefix(prefix, db_name):
-    print "Selecting by prefix '%s'" % prefix
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute("SELECT * FROM %s WHERE name LIKE ?" % db_name, (prefix + "%",))
@@ -84,23 +86,4 @@ def _cards_by_name_prefix(prefix, db_name):
     return [dict(zip(["name", "power", "toughness", "type",
                       "types", "subtypes", "cost", "cmc",
                       "colors", "rarity", "text", "printing"], d)) for d in data]
-
-
-if __name__ == "__main__":
-    cards = [{"name":"Llanowar Elves",
-              "power":"1",
-              "toughness":"1",
-              "type":"Elf",
-              "types":"Elf",
-              "subtypes":"Elf",
-              "cost":"{G}",
-              "cmc":"1",
-              "colors":"Green",
-              "rarity":"Common",
-              "text":"Tab to add {G} to your mana pool.",
-              "printing":"Onslaught"}]
-
-    init_db()
-    add_reference_cards(cards)
-    print reference_cards_by_name_prefix("ll")
 
