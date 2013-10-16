@@ -45,8 +45,6 @@ def main():
     for card in all_cards:
         all_formatted_cards += db_format(card)
 
-    print all_formatted_cards[0]
-
     print "Inserting %d cards into the database..." % len(all_formatted_cards)
     database.add_reference_cards(all_formatted_cards)
 
