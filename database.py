@@ -16,6 +16,7 @@ def init_db():
                                            cmc text,
                                            colors text,
                                            rarity text,
+                                           text text,
                                            printing text)""")
 
     c.execute("""CREATE TABLE reference_cards (name text,
@@ -28,6 +29,7 @@ def init_db():
                                                cmc text,
                                                colors text,
                                                rarity text,
+                                               text text,
                                                printing text,
                                                PRIMARY KEY (
                                                    name,
@@ -52,7 +54,7 @@ def _add_cards(cards, db_name):
         query_data = (card["name"], card["power"], card["toughness"],
                       card["type"], card["types"], card["subtypes"],
                       card["cost"], card["cmc"], card["colors"],
-                      card["rarity"], card["printing"])
+                      card["rarity"], card["text"], card["printing"])
         c.execute("INSERT INTO %s VALUES (?,?,?,?,?,?,?,?,?,?,?)" % db_name, query_data)
 
     conn.commit()
@@ -74,7 +76,7 @@ def _cards_by_name_prefix(prefix, db_name):
 
     return [dict(zip(["name", "power", "toughness", "type",
                       "types", "subtypes", "cost", "cmc",
-                      "colors", "rarity", "printing"], d)) for d in data]
+                      "colors", "rarity", "text", "printing"], d)) for d in data]
 
 
 if __name__ == "__main__":
@@ -88,6 +90,7 @@ if __name__ == "__main__":
               "cmc":"1",
               "colors":"Green",
               "rarity":"Common",
+              "text":"Tab to add {G} to your mana pool.",
               "printing":"Onslaught"}]
 
     init_db()
