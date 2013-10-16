@@ -55,7 +55,14 @@ def _add_cards(cards, db_name):
                       card["type"], card["types"], card["subtypes"],
                       card["cost"], card["cmc"], card["colors"],
                       card["rarity"], card["text"], card["printing"])
-        c.execute("INSERT INTO %s VALUES (?,?,?,?,?,?,?,?,?,?,?)" % db_name, query_data)
+        try:
+            c.execute("INSERT INTO %s VALUES (?,?,?,?,?,?,?,?,?,?,?,?)" % db_name, query_data)
+        except sqlite3.OperationalError as e:
+            print "Error:", e
+            print "======================"
+            print "Failed on card:"
+            print query_data
+            raise e
 
     conn.commit()
     conn.close()
