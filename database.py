@@ -49,7 +49,7 @@ def add_owned_cards(cards):
 def add_reference_cards(cards):
     _add_cards(cards, "reference_cards")
 
-def _add_cards(cards, db_name):
+def _add_cards(cards, table_name):
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
 
@@ -59,7 +59,7 @@ def _add_cards(cards, db_name):
                       card["cost"], card["cmc"], card["colors"],
                       card["rarity"], card["text"], card["printing"])
         try:
-            c.execute("INSERT INTO %s VALUES (?,?,?,?,?,?,?,?,?,?,?,?)" % db_name, query_data)
+            c.execute("INSERT INTO %s VALUES (?,?,?,?,?,?,?,?,?,?,?,?)" % table_name, query_data)
         except sqlite3.OperationalError as e:
             print "Error:", e
             print "======================"
@@ -76,10 +76,10 @@ def owned_cards_by_name_prefix(prefix):
 def reference_cards_by_name_prefix(prefix):
     return _cards_by_name_prefix(prefix, "reference_cards")
 
-def _cards_by_name_prefix(prefix, db_name):
+def _cards_by_name_prefix(prefix, table_name):
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
-    c.execute("SELECT * FROM %s WHERE name LIKE ?" % db_name, (prefix + "%",))
+    c.execute("SELECT * FROM %s WHERE name LIKE ?" % table_name, (prefix + "%",))
     data = c.fetchall()
     conn.close()
 
