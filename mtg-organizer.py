@@ -1,9 +1,25 @@
 #!/usr/bin/env python
 
+import web
 import database
 
-while True:
-    inp = raw_input("Card prefix: ")
-    cards = database.reference_cards_by_name_prefix(inp)
-    for card in cards:
-        print " ", card["name"], "--", card["printing"]
+urls = (
+        "/cards", "card_api"
+)
+
+class card_api:
+    def GET(self):
+        inp = web.input()
+        if "prefix" in inp:
+            ret_str = ""
+            results = database.reference_cards_by_name_prefix(inp["prefix"])
+            ret_str += "%d results\n\n" % len(results)
+            squashed = [{"name":i["name"], "printing":i["printing"]} for i in results]
+            ret_str += "\n\t".join(sorted(map(lambda x: " -- ".join(reversed(x.values())), squashed)))
+            return ret_str
+        else:
+            return "Prefix param is required"
+
+if __name__ == "__main__":
+    app = web.application(urls, globals())
+    app.run()
