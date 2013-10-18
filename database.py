@@ -55,7 +55,7 @@ def add_reference_cards(cards):
                       card["cost"], card["cmc"], card["colors"],
                       card["rarity"], card["text"], card["printing"])
         try:
-            c.execute("INSERT INTO reference_cards VALUES (?,?,?,?,?,?,?,?,?,?,?,?)" % table_name, query_data)
+            c.execute("INSERT INTO reference_cards VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", query_data)
         except sqlite3.OperationalError as e:
             print "Error:", e
             print "======================"
