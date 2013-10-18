@@ -7,6 +7,8 @@ urls = (
         "/api/cards/?", "card_api"
 )
 
+app = web.application(urls, globals())
+
 class card_api:
     def GET(self):
         inp = web.input()
@@ -21,5 +23,5 @@ class card_api:
             return "Prefix param is required"
 
 if __name__ == "__main__":
-    app = web.application(urls, globals())
+    web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
     app.run()
