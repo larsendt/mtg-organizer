@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-DB_FILE = "cards.sqlite"
+DB_FILE = "../data/cards.sqlite"
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
