@@ -4,15 +4,8 @@ import web
 import database
 
 urls = (
-        "/", "index",
         "/api/cards/?", "card_api"
 )
-
-render = web.template.render("templates/")
-
-class index:
-    def GET(self):
-        return render.index()
 
 class card_api:
     def GET(self):
