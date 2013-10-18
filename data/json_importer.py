@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import json
 import os
+import sys
+
+sys.path.append("../api")
 import database
 
 DATA_FILE = "AllSets-x.json"
