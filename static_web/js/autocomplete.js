@@ -50,7 +50,7 @@ function setup_autocomplete() {
         else if(event.which == 13) {
             var card = selected_card();
             if(card) {
-                window.location.href = "/card/?" + $.param(card);
+                window.location.href = "/card.html?" + $.param(card);
             }
             return false;
         }
