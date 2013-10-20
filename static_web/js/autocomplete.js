@@ -6,7 +6,7 @@ var selected_card_id = 0;
 
 function setup_autocomplete() {
     $("#prefix").keyup(function(event) {
-        if(event.which == 38 || event.which == 40) {
+        if(event.which == 38 || event.which == 40 || event.which == 13) {
             return false;
         }
 
@@ -48,7 +48,10 @@ function setup_autocomplete() {
             return false;
         }
         else if(event.which == 13) {
-            window.location.href = "/card/?name=Akroma&printing=Legions";
+            var card = selected_card();
+            if(card) {
+                window.location.href = "/card/?" + $.param(card);
+            }
             return false;
         }
         return true;
@@ -68,6 +71,18 @@ function select_prev_card() {
         $("#card-suggestions").children().eq(selected_card_id).attr("id", "");
         selected_card_id -= 1;
         $("#card-suggestions").children().eq(selected_card_id).attr("id", "selected-card");
+    }
+}
+
+function selected_card() {
+    if($("#card-suggestions").children().length > 0) {
+        var card = $("#card-suggestions").children("div").eq(selected_card_id);
+        name = card.children("span").eq(0).html();
+        printing = card.children("span").eq(1).html();
+        return {name:name, printing:printing};
+    }
+    else {
+        return null;
     }
 }
 
