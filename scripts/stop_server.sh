@@ -1,3 +1,11 @@
 #!/bin/bash
 
-kill `pgrep -f "python ../api/mtg-organizer.py"`
+pid=`pgrep -f "python ../api/mtg-organizer.py"`
+if [ $pid ]
+then
+    echo "Killed $pid"
+    kill $pid
+else
+    echo "No process to kill"
+    exit 0
+fi
