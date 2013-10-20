@@ -1,0 +1,40 @@
+body {
+    font-family: sans-serif;
+    font-size: 0.8em;
+    color: #333;
+    margin: 0px;
+    padding: 0px;
+    line-height: 1.7em;
+}
+
+#header {
+    background-color: #037;
+    color: #fff;
+    padding: 5px;
+    font-size: 14pt;
+}
+
+#content {
+    width: 1024px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#request-status {
+    color: #070;
+}
+
+.card {
+    padding: 2px;
+    margin: 2px;
+    background-color: #eee;
+    border: 1px solid #bbb;
+}
+
+#selected-card {
+    padding: 2px;
+    margin: 2px;
+    background-color: #dfd;
+    border: 1px solid #070;
+}
+

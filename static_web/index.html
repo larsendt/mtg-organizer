@@ -3,19 +3,21 @@
     <head>
         <meta charset="utf-8">
         <title>Happy Panda</title>
-        <script src="js/jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="js/jquery-2.0.3.min.js"></script>
+        <script src="js/json2.js"></script>
         <script src="js/autocomplete.js"></script>
     </head>
     <body>
         <div id="header">
-            <h1>Header</h1>
+            Header
         </div>
         <div id="content">
-            <p id="request-status">Idling...</p>
+            <div id="request-status">Idling...</div>
             <form id="prefix-form" action="/api/cards/" autocomplete="off">
-                Card Title: <input type="text" id="prefix" name="prefix">
+                Card Title: <input type="text" id="prefix" name="prefix" autofocus>
             </form>
-            <pre id="card-suggestions"></pre>
+            <div id="card-suggestions"></div>
         </div>
     </body>
 </html>
