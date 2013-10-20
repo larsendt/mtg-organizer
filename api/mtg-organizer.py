@@ -2,6 +2,7 @@
 
 import web
 import database
+import json
 
 urls = (
         "/api/cards/?", "card_api"
@@ -13,14 +14,11 @@ class card_api:
     def GET(self):
         inp = web.input()
         if "prefix" in inp:
-            ret_str = ""
-            results = database.reference_cards_by_name_prefix(inp["prefix"])
-            ret_str += "%d results\n\n" % len(results)
+            results = database.reference_cards_by_name_prefix(inp["prefix"])[0:10]
             squashed = [{"name":i["name"], "printing":i["printing"]} for i in results]
-            ret_str += "\n\t".join(sorted(map(lambda x: " -- ".join(reversed(x.values())), squashed)))
-            return ret_str
+            return json.dumps({"status":"ok", "cards":squashed})
         else:
-            return "Prefix param is required"
+            return json.dumps({"status":"error", "error":"Prefix parameter required"})
 
 if __name__ == "__main__":
     web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
