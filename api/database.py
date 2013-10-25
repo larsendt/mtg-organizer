@@ -75,14 +75,32 @@ def owned_cards_by_name_prefix(prefix):
     conn.close()
     return data
 
+def rows_to_dicts(rows):
+    return [dict(zip(["name", "power", "toughness", "type",
+                      "types", "subtypes", "cost", "cmc",
+                      "colors", "rarity", "text", "printing"], d)) for d in rows]
+
 def reference_cards_by_name_prefix(prefix):
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute("SELECT * FROM reference_cards WHERE name LIKE ?", (prefix + "%",))
     data = c.fetchall()
     conn.close()
+    return rows_to_dicts(data)
 
-    return [dict(zip(["name", "power", "toughness", "type",
-                      "types", "subtypes", "cost", "cmc",
-                      "colors", "rarity", "text", "printing"], d)) for d in data]
+def reference_card(name, printing):
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("SELECT * FROM reference_cards WHERE name=? AND printing=?", (name, printing))
+    data = c.fetchall()
+    conn.close()
+    if len(data) > 0:
+        return rows_to_dicts(data)[0]
+    else:
+        return None
+
+
+
+
+
 
