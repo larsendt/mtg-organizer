@@ -8,11 +8,17 @@ body {
 }
 
 #header {
-    background-color: #037;
+    background-color: #123;
     color: #fff;
     padding: 5px;
     font-size: 14pt;
 }
+
+#header a {
+    color: #fff;
+    text-decoration: none;
+}
+
 
 #content {
     width: 1024px;
@@ -42,4 +48,82 @@ body {
     background-color: #fdd;
     border: 1px solid #f00;
     padding: 5px;
+    visibility: hidden;
+}
+
+.header-mana {
+    width: 20px;
+    height: 20px;
+    margin-bottom: -4px;
+}
+
+#card-cost {
+    padding-bottom: 10px;
+}
+
+#card-cost span {
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 3px;
+    background-color: #aaa;
+}
+
+.mana {
+    width: 20px;
+    height: 20px;
+    padding: 1px;
+    margin-bottom: -6px;
+}
+
+#card-image {
+    width: 270;
+    padding: 10px;
+}
+
+#card-data {
+    width: 60%;
+    padding: 20px;
+}
+
+#card-name {
+    font-size: 18pt;
+}
+
+#card-flavor {
+    font-style: italic;
+}
+
+#card-rarity span {
+    padding: 5px;
+    border-radius: 3px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.mythic-rare span {
+    background-color: #f70;
+}
+
+.rare span {
+    background-color: #fb2;
+}
+
+.uncommon span {
+    background-color: #ccc;
+}
+
+.common span {
+    background-color: #000;
+    color: #fff;
+}
+
+.inline-mana {
+    width: 15px;
+    height: 15px;
+    margin-bottom: -4px;
+}
+
+#api-link a {
+    color: #999;
 }
