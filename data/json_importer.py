@@ -26,19 +26,9 @@ def db_format(card):
         out_card["text"] = card.get("text", "")
         out_card["printing"] = printing
         out_card["multiverseid"] = card["multiverseid"]
-
-        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_' "
-        name = card["name"].replace(u"\u2019", "'").replace(u"\u00e6", "AE")
-        tmpname = ""
-        for char in name:
-            if char in chars:
-                tmpname += char
-        out_card["imagefile"] = tmpname + ".png"
-
         out_card["flavor"] = card.get("flavor", "")
         out_cards.append(out_card)
     return out_cards
-
 
 def main():
     if not os.path.exists(database.DB_FILE):
