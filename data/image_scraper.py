@@ -6,47 +6,62 @@ import base64
 import os
 
 
-# new phyrexia http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/newphyrexia/spoiler
-# innistrad https://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/innistrad/cig
-# dark ascension http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/darkascension/cig
-# return to ravnica http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/returntoravnica/cig
-# gatecrash http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/gatecrash/cig
-# dragon's maze https://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/dragonsmaze/cig
-# theros http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/theros/cig
-# avacyn restored http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/avacynrestored/cig
-# m12 http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/magic2012/cig
-# m13 http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/magic2013/cig
-# m14 http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/magic2014coreset/cig
-# mirrodin beseiged http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/mirrodinbesieged/spoiler
+URLS = [
+    #("New Phyrexia", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/newphyrexia/spoiler"),
+    #("Innistrad", "https://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/innistrad/cig"),
+    #("Dark Ascension", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/darkascension/cig"),
+    #("Return to Ravnica", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/returntoravnica/cig"),
+    #("Gatecrash", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/gatecrash/cig"),
+    #("Dragon's Maze", "https://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/dragonsmaze/cig"),
+    #("Theros", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/theros/cig"),
+    #("Avacyn Restored", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/avacynrestored/cig"),
+    #("Magic 2012", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/magic2012/cig"),
+    #("Magic 2013", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/magic2013/cig"),
+    #("Magic 2014", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/magic2014coreset/cig"),
+    #("Mirrodin Beseiged", "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/mirrodinbesieged/spoiler"),
+    ("Commander", "http://www.wizards.com/magic/tcg/productarticle.aspx?x=mtg/tcg/commander/cig"),
+]
 
 IMG_DIR = "card_images/"
-URL = "http://www.wizards.com/magic/tcg/article.aspx?x=mtg/tcg/worldwake/spoiler"
-SET = "Worldwake"
 
-directory = os.path.join(IMG_DIR, SET)
-if not os.path.exists(directory):
-    os.mkdir(directory)
+for (SET, URL) in URLS:
+    if not os.path.exists(IMG_DIR):
+        os.mkdir(IMG_DIR)
 
-doctext = requests.get(URL).text
-dom = lxml.html.fromstring(doctext)
-imgs = dom.xpath("//img[@class='article-image'][@title]")
-img_urls = map(lambda x: (x.attrib["title"], x.attrib["src"]), imgs)
+    directory = os.path.join(IMG_DIR, SET)
+    if not os.path.exists(directory):
+        os.mkdir(directory)
 
-for (name, url) in img_urls:
-    fname = os.path.join(IMG_DIR, SET, base64.b64encode(name.encode("utf-8"), "_-"))
+    doctext = requests.get(URL).text
+    dom = lxml.html.fromstring(doctext)
+    imgs = dom.xpath("//img[@class='article-image'][@title]")
+    img_urls = map(lambda x: (x.attrib["title"], x.attrib["src"]), imgs)
 
-    while os.path.exists(fname):
-        fname += "+"
+    for (name, url) in img_urls:
+        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_' "
+        name = name.replace(u"\u2019", "'").replace(u"\u00e6", "AE")
+        if name.startswith("Akroma"):
+            print name.encode("utf-8")
+        tmpname = ""
+        for char in name:
+            if name.startswith("Akroma"):
+                print char
+            if char in chars:
+                tmpname += char
+        fname = os.path.join(IMG_DIR, SET, tmpname)
 
-    if url.endswith(".jpg") or url.endswith(".JPG") or url.endswith(".jpeg"):
-        fname += ".jpg"
-    elif url.endswith(".png") or url.endswith(".PNG"):
-        fname += ".png"
-    else:
-        print "Unknown extension for url:", url[-6:]
+        while os.path.exists(fname):
+            fname += "+"
 
-    print "Downloading '%s' to %s" % (name, fname)
+        if url.endswith(".jpg") or url.endswith(".JPG") or url.endswith(".jpeg"):
+            fname += ".jpg"
+        elif url.endswith(".png") or url.endswith(".PNG"):
+            fname += ".png"
+        else:
+            print "Unknown extension for url:", url[-6:]
 
-    data = requests.get(url).content
-    with open(fname, "w") as f:
-        f.write(data)
+        print "Downloading '%s' to %s" % (name, fname)
+
+        data = requests.get(url).content
+        with open(fname, "w") as f:
+            f.write(data)
