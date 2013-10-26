@@ -25,6 +25,9 @@ def init_db():
                                                rarity text not null,
                                                text text,
                                                printing text not null,
+                                               flavor text,
+                                               imagefile text,
+                                               multiverseid text,
                                                PRIMARY KEY (
                                                    name,
                                                    printing)
@@ -53,9 +56,10 @@ def add_reference_cards(cards):
         query_data = (card["name"], card["power"], card["toughness"],
                       card["type"], card["types"], card["subtypes"],
                       card["cost"], card["cmc"], card["colors"],
-                      card["rarity"], card["text"], card["printing"])
+                      card["rarity"], card["text"], card["printing"],
+                      card["flavor"], card["imagefile"], card["multiverseid"])
         try:
-            c.execute("INSERT INTO reference_cards VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", query_data)
+            c.execute("INSERT INTO reference_cards VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", query_data)
         except sqlite3.OperationalError as e:
             print "Error:", e
             print "======================"
@@ -78,7 +82,8 @@ def owned_cards_by_name_prefix(prefix):
 def rows_to_dicts(rows):
     return [dict(zip(["name", "power", "toughness", "type",
                       "types", "subtypes", "cost", "cmc",
-                      "colors", "rarity", "text", "printing"], d)) for d in rows]
+                      "colors", "rarity", "text", "printing",
+                      "flavor", "imagefile", "multiverseid"], d)) for d in rows]
 
 def reference_cards_by_name_prefix(prefix):
     conn = sqlite3.connect(DB_FILE)
