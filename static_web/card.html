@@ -11,12 +11,27 @@
     </head>
     <body>
         <div id="header">
-            Header
+            <a href="/">
+                <img src="i/mana/G.svg" class="header-mana">
+                <img src="i/mana/W.svg" class="header-mana">
+                <img src="i/mana/U.svg" class="header-mana">
+                <img src="i/mana/R.svg" class="header-mana">
+                <img src="i/mana/B.svg" class="header-mana">
+            </a>
         </div>
         <div id="content">
-            This is a card. It is pretty.
-            <div id="card-name"></div>
-            <div id="card-printing"></div>
+            <div id="oops"></div>
+            <div style="float: left;" id="card-image"><img id="actual-card-image" src="i/cards/unknown.png"></div>
+            <div style="float: right;" id="card-data">
+                <div id="card-name"></div>
+                <div id="card-printing"></div>
+                <div id="card-cost"></div>
+                <div id="card-rarity"></div>
+                <div id="card-text"></div>
+                <div id="card-flavor"></div>
+            </div>
+            <div style="clear: both"></div>
+            <div id="api-link"></div>
         </div>
     </body>
 </html>
