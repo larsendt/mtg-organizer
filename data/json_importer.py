@@ -10,25 +10,22 @@ import database
 DATA_FILE = "AllSets-x.json"
 
 def db_format(card):
-    out_cards = []
-    for printing in card["printings"]:
-        out_card = {}
-        out_card["name"] = card["name"]
-        out_card["power"] = card.get("power", None)
-        out_card["toughness"] = card.get("toughness", None)
-        out_card["type"] = card["type"]
-        out_card["types"] = ",".join(card.get("types", []))
-        out_card["subtypes"] = ",".join(card["subtypes"]) if "subtypes" in card else None
-        out_card["cost"] = card.get("manaCost", None)
-        out_card["cmc"] = card.get("cmc", None)
-        out_card["colors"] = ",".join(card.get("colors", []))
-        out_card["rarity"] = card["rarity"]
-        out_card["text"] = card.get("text", "")
-        out_card["printing"] = printing
-        out_card["multiverseid"] = card["multiverseid"]
-        out_card["flavor"] = card.get("flavor", "")
-        out_cards.append(out_card)
-    return out_cards
+    out_card = {}
+    out_card["name"] = card["name"]
+    out_card["power"] = card.get("power", None)
+    out_card["toughness"] = card.get("toughness", None)
+    out_card["type"] = card["type"]
+    out_card["types"] = ",".join(card.get("types", []))
+    out_card["subtypes"] = ",".join(card["subtypes"]) if "subtypes" in card else None
+    out_card["cost"] = card.get("manaCost", None)
+    out_card["cmc"] = card.get("cmc", None)
+    out_card["colors"] = ",".join(card.get("colors", []))
+    out_card["rarity"] = card["rarity"]
+    out_card["text"] = card.get("text", "")
+    out_card["printing"] = card["set"]
+    out_card["multiverseid"] = card["multiverseid"]
+    out_card["flavor"] = card.get("flavor", "")
+    return out_card
 
 def main():
     if not os.path.exists(database.DB_FILE):
@@ -42,13 +39,16 @@ def main():
     all_cards = []
 
     for key in data:
-        all_cards += data[key]["cards"]
+        set_cards = data[key]["cards"]
+        for card in set_cards:
+            card["set"] = data[key]["name"]
+        all_cards += set_cards
 
     all_formatted_cards = []
 
     print "Formatting card entries..."
     for card in all_cards:
-        all_formatted_cards += db_format(card)
+        all_formatted_cards.append(db_format(card))
 
     print "Inserting %d cards into the database..." % len(all_formatted_cards)
     database.add_reference_cards(all_formatted_cards)
