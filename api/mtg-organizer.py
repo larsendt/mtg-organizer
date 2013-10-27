@@ -15,7 +15,7 @@ class cards_api:
     def GET(self):
         inp = web.input()
         if "prefix" in inp:
-            results = database.reference_cards_by_name_prefix(inp["prefix"])[0:10]
+            results = database.reference_cards_by_name_prefix(inp["prefix"])[0:50]
             squashed = [{"name":i["name"], "printing":i["printing"]} for i in results]
             return json.dumps({"status":"ok", "cards":squashed})
         else:
