@@ -113,6 +113,17 @@ function set_card_rarity(rarity) {
 }
 
 
+function set_card_power_toughness(power, toughness) {
+    if(power && toughness) {
+        $("#power-toughness").html("<span>" + power + "/" + toughness + "</span>");
+        $("#power-toughness span").css("visibility", "visible");
+    }
+    else {
+        $("#power-toughness span").css("visibility", "hidden");
+    }
+}
+
+
 $(document).ready(function() {
     var url = $.url();
     var request = $.ajax({
@@ -136,6 +147,7 @@ $(document).ready(function() {
         $("#api-link").html("<a href=\"/api/card/?name=" + data.name + "&printing=" + data.printing + "\">View in API</a>");
         set_card_image(data.multiverseid);
         set_card_rarity(data.rarity);
+        set_card_power_toughness(data.power, data.toughness);
     });
 
 });

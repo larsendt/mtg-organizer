@@ -76,11 +76,6 @@ body {
     margin-bottom: -6px;
 }
 
-#card-image {
-    width: 270;
-    padding: 10px;
-}
-
 #card-data {
     width: 60%;
     padding: 20px;
@@ -126,4 +121,15 @@ body {
 
 #api-link a {
     color: #999;
+}
+
+#power-toughness span {
+    background-color: #aaa;
+    visibility: hidden;
+    padding: 5px;
+    border-radius: 3px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 16pt;
+    color: #000;
 }
