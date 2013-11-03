@@ -1,17 +1,22 @@
 var card_name;
 var card_printing;
 
-function casting_cost_images(cost) {
-    html = "<span>"
-    costs = cost.split("{");
-    for(i in costs) {
-        c = costs[i].replace(/\}/gi, "").replace("/", "");
-        if(c != "") {
-            console.log("Cost: " + c);
-            html += "<img src=\"/i/mana/" + c + ".svg\" class=\"mana\">";
+function set_casting_cost(cost) {
+    if(cost) {
+        var html = "<span>";
+        costs = cost.split("{");
+        for(i in costs) {
+            c = costs[i].replace(/\}/gi, "").replace("/", "");
+            if(c != "") {
+                console.log("Cost: " + c);
+                html += "<img src=\"/i/mana/" + c + ".svg\" class=\"mana\">";
+            }
         }
+        $("#card-cost").html(html + "</span>");
     }
-    return html + "</span>";
+    else {
+        $("#card-cost").css("visiblity", "hidden");
+    }
 }
 
 function insert_icons(text) {
@@ -75,6 +80,15 @@ function fmt(text) {
     return text.replace(/\n\n/gi, "<br>");
 }
 
+function set_card_text(text) {
+    if(text.length == 1) {
+        $("#card-text").css("visibility", "hidden");
+    }
+    else {
+        $("#card-text").html("<p>" + insert_icons(fmt(text)) + "</p>");
+    }
+}
+
 function set_card_image(multiverseid) {
     var url = "/i/cards/" + multiverseid + ".jpg";
 
@@ -104,7 +118,7 @@ function set_card_rarity(rarity) {
     else if(rarity == "Uncommon") {
         $("#card-rarity").attr("class", "uncommon");
     }
-    else if(rarity == "Common") {
+    else if(rarity == "Common" || rarity == "Basic Land") {
         $("#card-rarity").attr("class", "common");
     }
     else {
@@ -141,10 +155,10 @@ $(document).ready(function() {
 
         $("#card-name").html("<p>" + data.name + "</p>");
         $("#card-printing").html("<p>" + data.printing + "</p>");
-        $("#card-text").html("<p>" + insert_icons(fmt(data.text)) + "</p>");
         $("#card-flavor").html("<p>" + fmt(data.flavor) + "</p>");
-        $("#card-cost").html(casting_cost_images(data.cost));
         $("#api-link").html("<a href=\"/api/card/?name=" + data.name + "&printing=" + data.printing + "\">View in API</a>");
+        set_card_text(data.text);
+        set_casting_cost(data.cost);
         set_card_image(data.multiverseid);
         set_card_rarity(data.rarity);
         set_card_power_toughness(data.power, data.toughness);
