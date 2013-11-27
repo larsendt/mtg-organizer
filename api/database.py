@@ -45,7 +45,15 @@ def add_owned_cards(cards):
 
     for card in cards:
         c.execute("SELECT * FROM owned_cards WHERE name = ? and printing = ?", (card["name"], card["printing"]))
-        print c.fetchall()
+        data = c.fetchall()
+        if len(data) > 0:
+            count = data[0][2]
+            c.execute("UPDATE owned_cards SET count=? WHERE name=? and printing=?", (count+1, card["name"], card["printing"]))
+        else:
+            c.execute("INSERT INTO owned_cards VALUES (?,?,1)", (card["name"], card["printing"]))
+    conn.commit()
+    conn.close()
+
 
 def add_reference_cards(cards):
     conn = sqlite3.connect(DB_FILE)
